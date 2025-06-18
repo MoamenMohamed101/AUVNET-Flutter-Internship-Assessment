@@ -41,6 +41,7 @@ class HomeState {
   final bool isLoadingRestaurants;
   final String? servicesError;
   final String? restaurantsError;
+  final int currentBannerIndex;
 
   const HomeState({
     this.services = const [],
@@ -49,6 +50,7 @@ class HomeState {
     this.isLoadingRestaurants = false,
     this.servicesError,
     this.restaurantsError,
+    this.currentBannerIndex = 0,
   });
 
   HomeState copyWith({
@@ -58,6 +60,7 @@ class HomeState {
     bool? isLoadingRestaurants,
     String? servicesError,
     String? restaurantsError,
+    int? currentBannerIndex,
   }) {
     return HomeState(
       services: services ?? this.services,
@@ -66,6 +69,7 @@ class HomeState {
       isLoadingRestaurants: isLoadingRestaurants ?? this.isLoadingRestaurants,
       servicesError: servicesError,
       restaurantsError: restaurantsError,
+      currentBannerIndex: currentBannerIndex ?? this.currentBannerIndex,
     );
   }
 }

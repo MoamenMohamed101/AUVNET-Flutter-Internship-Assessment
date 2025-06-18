@@ -47,9 +47,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     : super(const HomeState()) {
     on<LoadServicesEvent>(_onLoadServices);
     on<LoadRestaurantsEvent>(_onLoadRestaurants);
-    on<ChangeBannerIndexEvent>((event, emit) {
-      emit(state.copyWith(currentBannerIndex: event.index));
-    });
   }
 
   Future<void> _onLoadServices(

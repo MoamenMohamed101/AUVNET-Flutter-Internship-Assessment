@@ -23,15 +23,10 @@ import 'package:nawel/presentation/resources/styles_manager.dart';
 import 'package:nawel/presentation/resources/values_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<ShortcutModel> shortCuts = [
+  final List<ShortcutModel> shortCuts = [
     ShortcutModel(ImageAssets.order, AppStrings.pastOrder),
     ShortcutModel(ImageAssets.securityVault, AppStrings.superSaver),
     ShortcutModel(ImageAssets.securityVaultShape, AppStrings.mustTries),
@@ -39,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     ShortcutModel(ImageAssets.star, AppStrings.bestSellers),
   ];
 
-  List<String> banners = [
+  final List<String> banners = [
     ImageAssets.photo,
     ImageAssets.photo,
     ImageAssets.photo,
@@ -48,9 +43,7 @@ class _HomePageState extends State<HomePage> {
     ImageAssets.photo,
   ];
 
-  CarouselSliderController controller = CarouselSliderController();
-
-  PageController pageController = PageController();
+  final CarouselSliderController controller = CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
@@ -104,47 +97,58 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Column homeBanners() {
-    return Column(
-      children: [
-        CarouselSlider(
-          items: banners
-              .map(
-                (toElement) => SizedBox(
-                  width: double.infinity,
-                  child: Card(
-                    elevation: AppSize.s1_5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(AppSize.s12),
+  homeBanners() {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            CarouselSlider(
+              items: banners
+                  .map(
+                    (toElement) => SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        elevation: AppSize.s1_5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(AppSize.s12),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(AppSize.s12),
+                          ),
+                          child: Image.asset(
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                            toElement,
+                          ),
+                        ),
                       ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(AppSize.s12),
-                      ),
-                      child: Image.asset(
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                        toElement,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
-          options: CarouselOptions(
-            height: AppSize.s200.h,
-            autoPlay: true,
-            enableInfiniteScroll: true,
-            enlargeCenterPage: true,
-          ),
-          carouselController: controller,
-        ),
-        Gap(AppSize.s20.h),
-        SmoothPageIndicator(controller: pageController, count: banners.length),
-      ],
+                  )
+                  .toList(),
+              options: CarouselOptions(
+                height: AppSize.s200.h,
+                autoPlay: true,
+                enableInfiniteScroll: true,
+                enlargeCenterPage: true,
+                onPageChanged: (index, reason) {
+                  context.read<HomeBloc>().add(ChangeBannerIndexEvent(index));
+                },
+              ),
+              carouselController: controller,
+            ),
+            Gap(AppSize.s20.h),
+            AnimatedSmoothIndicator(
+              activeIndex: state.currentBannerIndex,
+              count: banners.length,
+              effect: WormEffect(), // optional styling
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -326,7 +330,7 @@ class _HomePageState extends State<HomePage> {
     return restaurantsList(state.restaurants);
   }
 
-  restaurantsList(List<RestaurantsModel> restaurants) {
+  ListView restaurantsList(List<RestaurantsModel> restaurants) {
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsetsDirectional.only(

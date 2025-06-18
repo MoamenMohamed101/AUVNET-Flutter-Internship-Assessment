@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nawel/domain/models/service_model.dart';
+import 'package:nawel/presentation/resources/assets_manager.dart';
+import 'package:nawel/presentation/resources/color_manager.dart';
+import 'package:nawel/presentation/resources/styles_manager.dart';
+import 'package:nawel/presentation/resources/values_manager.dart';
+
+class ServiceItem extends StatelessWidget {
+  final ServiceModel serviceModel;
+
+  const ServiceItem(this.serviceModel, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        productImage(),
+        productPercentage(),
+        productName(),
+      ],
+    );
+  }
+
+  Text productName() {
+    return Text(
+        serviceModel.productName,
+        style: getRegularTextStyle(color: ColorManager.blackColor),
+      );
+  }
+
+  Container productPercentage() {
+    return Container(
+        height: AppSize.s20.h,
+        width: AppSize.s80.w,
+        decoration: BoxDecoration(
+          color: ColorManager.purpleColor,
+          borderRadius: BorderRadius.circular(AppSize.s10.r),
+        ),
+        child: Text(
+          textAlign: TextAlign.center,
+          "Up to ${serviceModel.productNumber} %",
+          style: getMediumTextStyle(color: ColorManager.whiteColor),
+        ),
+      );
+  }
+
+  Container productImage() {
+    return Container(
+      height: AppSize.s70.h,
+      width: AppSize.s105.w,
+      decoration: BoxDecoration(
+        color: ColorManager.liteWhiteColor,
+        borderRadius: BorderRadius.circular(AppSize.s10.r),
+      ),
+      child: Center(child: Image.asset(serviceModel.productImage)),
+    );
+  }
+}

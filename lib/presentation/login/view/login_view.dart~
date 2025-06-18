@@ -1,0 +1,111 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:nawel/data/repository/repository.dart';
+import 'package:nawel/presentation/login/login_bloc.dart';
+import 'package:nawel/presentation/resources/assets_manager.dart';
+import 'package:nawel/presentation/resources/color_manager.dart';
+import 'package:nawel/presentation/resources/routes_manager.dart';
+import 'package:nawel/presentation/resources/strings_manager.dart';
+import 'package:nawel/presentation/resources/styles_manager.dart';
+import 'package:nawel/presentation/resources/values_manager.dart';
+import 'package:nawel/widgets/button_widget.dart';
+import 'package:nawel/widgets/text_button_widget.dart';
+import 'package:nawel/widgets/text_form_field_widget.dart';
+import '../../../domain/usecase/login_usecase.dart';
+
+class LoginView extends StatelessWidget {
+
+  LoginView({super.key});
+
+  final TextEditingController emailController = TextEditingController(),
+      passwordController = TextEditingController();
+
+  final bool isPassword = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => LoginBloc(LoginUseCase(RepositoryImpl(FirebaseAuth.instance))),
+      child: Scaffold(
+        backgroundColor: ColorManager.whiteColor,
+        body: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              Navigator.pushReplacementNamed(context, Routes.mainRoute);
+            } else if (state is LoginFailure) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(ImageAssets.appLogo),
+                    emailTextFormField(),
+                    passwordTextFormField(context),
+                    Gap(AppSize.s26.h),
+                    state is LoginLoading
+                        ? CircularProgressIndicator()
+                        : ButtonWidget(
+                            text: AppStrings.login,
+                            onTap: () {
+                              context.read<LoginBloc>().add(
+                                LoginButtonPressed(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                ),
+                              );
+                              Navigator.pushNamed(context, Routes.mainRoute);
+                            },
+                          ),
+                    Gap(AppSize.s16.h),
+                    createAccountButton(context),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  TextButtonWidget createAccountButton(BuildContext context) {
+    return TextButtonWidget(
+      text: AppStrings.createAnAccount,
+      onPressed: () => Navigator.pushNamed(context, Routes.registerRoute),
+      textStyle: getMediumTextStyle(
+        color: ColorManager.blueColor,
+        fontSize: AppSize.s14.sp,
+      ),
+    );
+  }
+
+  TextFormFieldWidget passwordTextFormField(BuildContext context) {
+    return TextFormFieldWidget(
+      text: AppStrings.password,
+      icon: Icons.lock_outline,
+      isPassword: isPassword,
+      onPressed: () => context.read<LoginBloc>().add(
+        LoginVisibilityPressed(isPassword: isPassword),
+      ),
+      suffixIcon: isPassword ? Icons.remove_red_eye : Icons.visibility_off,
+      controller: passwordController,
+    );
+  }
+
+  TextFormFieldWidget emailTextFormField() {
+    return TextFormFieldWidget(
+      text: AppStrings.mail,
+      icon: Icons.email_outlined,
+      controller: emailController,
+    );
+  }
+}

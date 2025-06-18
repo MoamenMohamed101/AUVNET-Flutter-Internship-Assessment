@@ -1,0 +1,19 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:nawel/presentation/onBoarding/bloc/on_boarding_event.dart';
+import 'package:nawel/presentation/onBoarding/bloc/on_boarding_state.dart';
+import 'package:nawel/presentation/resources/values_manager.dart';
+
+class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
+  OnboardingBloc() : super(OnboardingState(currentPage: AppSize.s1)) {
+    on<OnPageChangedEvent>((event, emit) {
+      emit(state.copyWith(currentPage: event.newIndex));
+    });
+
+    on<CompleteOnboardingEvent>((event, emit) async {
+      final box = Hive.box('settings');
+      await box.put('onBoarded', true);
+      emit(state.copyWith(isCompleted: true));
+    });
+  }
+}

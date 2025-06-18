@@ -1,0 +1,18 @@
+const String imagesPath = 'assets/images';
+
+class ImageAssets {
+  static const String appLogo = "$imagesPath/logo.png";
+  static const String securityVault = "$imagesPath/security_vault.png";
+  static const String securityVaultShape = "$imagesPath/security_shape.png";
+  static const String star = "$imagesPath/star.png";
+  static const String heart = "$imagesPath/heart.png";
+  static const String order = "$imagesPath/order.png";
+  static const String onboardingGradient =
+      "$imagesPath/onboarding_gradient.svg";
+  static const String home = "assets/images/home.svg";
+  static const String categories = "$imagesPath/categories.svg";
+  static const String deliver = "$imagesPath/delivery.svg";
+  static const String cart = "$imagesPath/cart.svg";
+  static const String profile = "$imagesPath/profile.svg";
+  static const String rectangle = "$imagesPath/rectangle.svg";
+}

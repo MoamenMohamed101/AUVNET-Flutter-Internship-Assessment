@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nawel/presentation/resources/values_manager.dart';
+
+class TextFormFieldWidget extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final IconData? suffixIcon;
+  final TextEditingController controller;
+  void Function()? onPressed;
+  bool isPassword;
+
+   TextFormFieldWidget({
+    super.key,
+    required this.text,
+    required this.icon,
+    required this.controller,
+    this.isPassword = false,
+    this.suffixIcon,
+    this.onPressed
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: AppSize.s50.h,
+      width: 300.w,
+      margin: EdgeInsets.only(top: AppSize.s20),
+      child: TextFormField(
+        obscureText: isPassword,
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: text,
+          prefixIcon: Icon(icon),
+          suffixIcon: suffixIcon != null
+              ? IconButton(
+                  onPressed: onPressed,
+                  icon: Icon(suffixIcon),
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSize.s10),
+          ),
+        ),
+      ),
+    );
+  }
+}

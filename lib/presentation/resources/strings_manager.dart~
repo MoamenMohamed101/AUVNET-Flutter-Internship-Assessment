@@ -1,0 +1,35 @@
+class AppStrings {
+  static const String noRouteFound = "No Route Found";
+  static const String onBoardingTitle1 = "all-in-one delivery ";
+  static const String onSubTitleBoardingTitle1 = "Order groceries, medicines, and meals delivered straight to your door";
+  static const String onBoardingTitle2 = "User-to-User Delivery";
+  static const String onSubTitleBoardingTitle2 = "Send or receive items from other users quickly and easily";
+  static const String onBoardingTitle3 = "Sales & Discounts";
+  static const String onSubTitleBoardingTitle3 = "Discover exclusive sales and deals every day";
+  static const String login = "Login";
+  static const String getStarted = "Get Started";
+  static const String register = "Register";
+  static const String next = "next";
+  static const String mail = "mail";
+  static const String password = "password";
+  static const String confirmPassword = "confirm password";
+  static const String createAnAccount = "Create an account";
+  static const String home = "Home";
+  static const String categories = "Categories";
+  static const String deliver = "Deliver";
+  static const String cart = "Cart";
+  static const String profile = "Profile";
+  static const String deliveringTo = "Delivering to";
+  static const String address = "Al Satwa, 81A Street";
+  static const String services = "Services:";
+  static const String shortcuts = "Shortcuts:";
+  static const String popularRestaurants = "Popular restaurants nearby";
+  static const String errorMessage = "Something went wrong, please try again";
+  static const String code = "Got a code !";
+  static const String addCode = "Add your code and save on your \norder";
+  static const String pastOrder = "Past orders";
+  static const String mustTries = "Must-tries";
+  static const String superSaver = "Super Saver";
+  static const String giveBack = "Give Back";
+  static const String pastOrder = "Past orders";
+}

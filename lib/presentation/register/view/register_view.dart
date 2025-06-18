@@ -1,0 +1,116 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:nawel/data/repository/repository.dart';
+import 'package:nawel/domain/usecase/register_usecase.dart';
+import 'package:nawel/presentation/register/register_bloc.dart';
+import 'package:nawel/presentation/resources/assets_manager.dart';
+import 'package:nawel/presentation/resources/color_manager.dart';
+import 'package:nawel/presentation/resources/routes_manager.dart';
+import 'package:nawel/presentation/resources/strings_manager.dart';
+import 'package:nawel/presentation/resources/values_manager.dart';
+import 'package:nawel/widgets/button_widget.dart';
+import 'package:nawel/widgets/text_form_field_widget.dart';
+
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
+
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  TextEditingController emailController = TextEditingController(),
+      passwordController = TextEditingController(),
+      confirmPasswordController = TextEditingController();
+
+  bool isPassword = true, isConfirmPassword = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) =>
+          RegisterBloc(RegisterUseCase(RepositoryImpl(FirebaseAuth.instance))),
+      child: Scaffold(
+        backgroundColor: ColorManager.whiteColor,
+        body: BlocConsumer<RegisterBloc, RegisterState>(
+          listener: (context, state) {
+            if (state is RegisterSuccess) {
+              Navigator.pushReplacementNamed(context, Routes.mainRoute);
+            } else if (state is RegisterFailure) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(ImageAssets.appLogo),
+                    emailTextFormField(),
+                    passwordTextFormField(
+                      AppStrings.password,
+                      passwordController,
+                    ),
+                    passwordTextFormField(
+                      AppStrings.confirmPassword,
+                      confirmPasswordController,
+                    ),
+                    Gap(AppSize.s26.h),
+                    state is RegisterLoading
+                        ? CircularProgressIndicator()
+                        : ButtonWidget(
+                            text: AppStrings.register,
+                            onTap: () {
+                              context.read<RegisterBloc>().add(
+                                RegisterPressed(
+                                  emailController.text.trim(),
+                                  passwordController.text.trim(),
+                                  confirmPasswordController.text.trim(),
+                                ),
+                              );
+                            },
+                          ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  TextFormFieldWidget passwordTextFormField(
+    String text,
+    TextEditingController controller,
+  ) => TextFormFieldWidget(
+    text: text,
+    icon: Icons.lock_outline,
+    isPassword: text == AppStrings.password ? isPassword : isConfirmPassword,
+    onPressed: () => text == AppStrings.password
+        ? setState(() => isPassword = !isPassword)
+        : setState(() => isConfirmPassword = !isConfirmPassword),
+    suffixIcon: text == AppStrings.password
+        ? isPassword
+              ? Icons.remove_red_eye
+              : Icons.visibility_off
+        : isConfirmPassword
+        ? Icons.remove_red_eye
+        : Icons.visibility_off,
+    controller: controller,
+  );
+
+  TextFormFieldWidget emailTextFormField() {
+    return TextFormFieldWidget(
+      text: AppStrings.mail,
+      icon: Icons.email_outlined,
+      controller: emailController,
+    );
+  }
+}

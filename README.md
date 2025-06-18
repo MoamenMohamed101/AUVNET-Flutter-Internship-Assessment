@@ -64,7 +64,7 @@ This project follows the **Clean Architecture** approach with the following stru
 
 lib/
 │
-├── app/ → App entry point, themes, constants, routes
+├── app/ → App entry point, constants
 │
 ├── data/ → Data layer (Firebase service, Hive, DTOs, models)
 │ ├── models/ → App data models (e.g., ServiceModel, RestaurantModel)
@@ -72,7 +72,6 @@ lib/
 │ └── repository/ → Repository implementation (calls use cases)
 │
 ├── domain/ → Business logic layer
-│ ├── entities/ → Core business entities (optional)
 │ ├── repository/ → Abstract repository interfaces
 │ └── usecases/ → Application use cases (e.g., LoginUseCase, GetServicesUseCase)
 │
@@ -80,6 +79,6 @@ lib/
 │ ├── views/ → Screens like SplashView, LoginView, OnboardingView
 │ ├── blocs/ → BLoC logic (LoginBloc, OnboardingBloc, etc.)
 │ ├── widgets/ → Reusable widgets
-│ └── routes/ → GoRouter or Navigator setup
+│ └── routes/ → Navigator setup
 │
 └── main.dart → App initialization and entry point

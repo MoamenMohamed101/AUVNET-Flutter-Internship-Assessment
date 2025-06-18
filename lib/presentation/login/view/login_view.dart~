@@ -16,15 +16,21 @@ import 'package:nawel/widgets/text_button_widget.dart';
 import 'package:nawel/widgets/text_form_field_widget.dart';
 import '../../../domain/usecase/login_usecase.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
 
   LoginView({super.key});
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController(),
       passwordController = TextEditingController();
 
-  final bool isPassword = true;
+  final bool _initialPasswordVisibility = true;
 
+  
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -49,7 +55,7 @@ class LoginView extends StatelessWidget {
                   children: [
                     Image.asset(ImageAssets.appLogo),
                     emailTextFormField(),
-                    passwordTextFormField(context),
+                    passwordTextFormField(context, state),
                     Gap(AppSize.s26.h),
                     state is LoginLoading
                         ? CircularProgressIndicator()
@@ -62,7 +68,7 @@ class LoginView extends StatelessWidget {
                                   password: passwordController.text.trim(),
                                 ),
                               );
-                              Navigator.pushNamed(context, Routes.mainRoute);
+                              // Navigator.pushNamed(context, Routes.mainRoute);
                             },
                           ),
                     Gap(AppSize.s16.h),
@@ -88,15 +94,15 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  TextFormFieldWidget passwordTextFormField(BuildContext context) {
+  TextFormFieldWidget passwordTextFormField(BuildContext context, LoginState state) {
     return TextFormFieldWidget(
       text: AppStrings.password,
       icon: Icons.lock_outline,
-      isPassword: isPassword,
+      isPassword: !state.isPasswordVisible,
       onPressed: () => context.read<LoginBloc>().add(
-        LoginVisibilityPressed(isPassword: isPassword),
+        LoginVisibilityPressed(isPassword: !state.isPasswordVisible),
       ),
-      suffixIcon: isPassword ? Icons.remove_red_eye : Icons.visibility_off,
+      suffixIcon: !state.isPasswordVisible ? Icons.remove_red_eye : Icons.visibility_off,
       controller: passwordController,
     );
   }

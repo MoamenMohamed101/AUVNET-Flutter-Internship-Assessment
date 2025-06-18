@@ -38,7 +38,7 @@ class _RegisterViewState extends State<RegisterView> {
         body: BlocConsumer<RegisterBloc, RegisterState>(
           listener: (context, state) {
             if (state is RegisterSuccess) {
-              Navigator.pushReplacementNamed(context, Routes.mainRoute);
+              Navigator.pushReplacementNamed(context, Routes.loginRoute);
             } else if (state is RegisterFailure) {
               ScaffoldMessenger.of(
                 context,

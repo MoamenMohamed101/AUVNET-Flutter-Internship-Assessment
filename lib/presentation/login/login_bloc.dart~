@@ -9,15 +9,15 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
-  late Box box;
+  // late Box box;
 
   LoginBloc(this.loginUseCase) : super(LoginInitial()) {
     on<LoginButtonPressed>((event, emit) async {
       emit(LoginLoading());
       try {
-        await loginUseCase.login(event.email, event.password);
         final box = Hive.box('settings');
         await box.put('loggedIn', true);
+        await loginUseCase.login(event.email, event.password);
         emit(LoginSuccess());
       } catch (e) {
         emit(LoginFailure(e.toString()));

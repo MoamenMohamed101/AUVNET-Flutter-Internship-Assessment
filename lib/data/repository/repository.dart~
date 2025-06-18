@@ -75,13 +75,24 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<List<RestaurantsModel>> getRestaurants() async {
+    final box = Hive.box<RestaurantsModel>('restaurantsBox');
+    if (box.isNotEmpty) {
+      return box.values.toList();
+    }
     try {
       final snapshot = await fireStore.collection('restaurants').get();
-      return snapshot.docs.map((doc) {
+
+      final restaurants = snapshot.docs.map((doc) {
         return RestaurantsModel.fromJson(doc.data());
       }).toList();
+      await box.clear();
+      for (int i = 0; i < restaurants.length; i++) {
+        await box.put(i, restaurants[i]);
+      }
+      return restaurants;
     } catch (e) {
       throw Exception('Failed to load restaurants: $e');
     }
   }
+
 }

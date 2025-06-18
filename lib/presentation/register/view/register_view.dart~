@@ -46,36 +46,38 @@ class _RegisterViewState extends State<RegisterView> {
             }
           },
           builder: (context, state) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(ImageAssets.appLogo),
-                  emailTextFormField(),
-                  passwordTextFormField(
-                    AppStrings.password,
-                    passwordController,
-                  ),
-                  passwordTextFormField(
-                    AppStrings.confirmPassword,
-                    confirmPasswordController,
-                  ),
-                  Gap(AppSize.s26.h),
-                  state is RegisterLoading
-                      ? CircularProgressIndicator()
-                      : ButtonWidget(
-                          text: AppStrings.register,
-                          onTap: () {
-                            context.read<RegisterBloc>().add(
-                              RegisterPressed(
-                                emailController.text.trim(),
-                                passwordController.text.trim(),
-                                confirmPasswordController.text.trim(),
-                              ),
-                            );
-                          },
-                        ),
-                ],
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(ImageAssets.appLogo),
+                    emailTextFormField(),
+                    passwordTextFormField(
+                      AppStrings.password,
+                      passwordController,
+                    ),
+                    passwordTextFormField(
+                      AppStrings.confirmPassword,
+                      confirmPasswordController,
+                    ),
+                    Gap(AppSize.s26.h),
+                    state is RegisterLoading
+                        ? CircularProgressIndicator()
+                        : ButtonWidget(
+                            text: AppStrings.register,
+                            onTap: () {
+                              context.read<RegisterBloc>().add(
+                                RegisterPressed(
+                                  emailController.text.trim(),
+                                  passwordController.text.trim(),
+                                  confirmPasswordController.text.trim(),
+                                ),
+                              );
+                            },
+                          ),
+                  ],
+                ),
               ),
             );
           },

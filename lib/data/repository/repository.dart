@@ -94,5 +94,4 @@ class RepositoryImpl extends Repository {
       throw Exception('Failed to load restaurants: $e');
     }
   }
-
 }

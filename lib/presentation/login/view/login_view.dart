@@ -16,10 +16,15 @@ import 'package:nawel/widgets/text_button_widget.dart';
 import 'package:nawel/widgets/text_form_field_widget.dart';
 import '../../../domain/usecase/login_usecase.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
 
   LoginView({super.key});
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController(),
       passwordController = TextEditingController();
 

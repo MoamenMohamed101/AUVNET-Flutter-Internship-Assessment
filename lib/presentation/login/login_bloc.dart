@@ -9,7 +9,6 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
-  late Box box;
 
   LoginBloc(this.loginUseCase) : super(LoginInitial()) {
     on<LoginButtonPressed>((event, emit) async {
